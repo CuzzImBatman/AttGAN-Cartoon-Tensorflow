@@ -4,10 +4,12 @@ import six
 
 import tensorflow as tf
 
-from tensorflow.contrib.framework.python.ops import add_arg_scope
-from tensorflow.contrib.framework.python.ops import variables
-from tensorflow.contrib.layers.python.layers import initializers
-from tensorflow.contrib.layers.python.layers import utils
+from tf_slim import add_arg_scope
+from tf_slim.ops  import variables
+# from tensorflow.contrib.layers.python.layers import initializers
+from tf_slim.layers import initializers
+
+from tf_slim.layers import utils
 
 from tensorflow.python.framework import ops
 from tensorflow.python.ops import array_ops
@@ -309,7 +311,7 @@ def spectral_normalization(weights,
                            num_iterations=1,
                            epsilon=1e-12,
                            u_initializer=tf.random_normal_initializer(),
-                           updates_collections=tf.GraphKeys.UPDATE_OPS,
+                           updates_collections=tf.compat.v1.GraphKeys.UPDATE_OPS,
                            is_training=True,
                            reuse=None,
                            variables_collections=None,

@@ -1,7 +1,7 @@
 import tensorflow as tf
 
 
-def center_loss(features, labels, num_classes, alpha=0.5, updates_collections=tf.GraphKeys.UPDATE_OPS, scope=None):
+def center_loss(features, labels, num_classes, alpha=0.5, updates_collections=tf.compat.v1.GraphKeys.UPDATE_OPS, scope=None):
     # modified from https://github.com/EncodeTS/TensorFlow_Center_Loss/blob/master/center_loss.py
 
     assert features.shape.ndims == 2, 'The rank of `features` should be 2!'

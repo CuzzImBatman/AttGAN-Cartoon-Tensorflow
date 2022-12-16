@@ -1,8 +1,8 @@
 import functools
 
 import tensorflow as tf
-import tensorflow.contrib.slim as slim
-
+# import tensorflow.contrib.slim as slim
+import tf_slim as slim
 import utils
 
 
@@ -22,7 +22,7 @@ class UNetGenc:
 
         conv_norm_lrelu = functools.partial(conv_, normalizer_fn=norm, activation_fn=tf.nn.leaky_relu)
 
-        with tf.variable_scope(scope, reuse=tf.AUTO_REUSE):
+        with tf.compat.v1.variable_scope(scope, reuse=tf.compat.v1.AUTO_REUSE):
             z = x
             zs = []
             for i in range(n_downsamplings):
@@ -31,9 +31,9 @@ class UNetGenc:
                 zs.append(z)
 
         # variables and update operations
-        self.variables = tf.global_variables(scope)
-        self.trainable_variables = tf.trainable_variables(scope)
-        self.reg_losses = tf.losses.get_regularization_losses(scope)
+        self.variables = tf.compat.v1.global_variables(scope)
+        self.trainable_variables = tf.compat.v1.trainable_variables(scope)
+        self.reg_losses = tf.compat.v1.losses.get_regularization_losses(scope)
 
         return zs
 
@@ -49,8 +49,9 @@ class UNetGdec:
 
         dconv_norm_relu = functools.partial(dconv_, normalizer_fn=norm, activation_fn=tf.nn.relu)
 
-        with tf.variable_scope(scope, reuse=tf.AUTO_REUSE):
-            a = tf.to_float(a)
+        with tf.compat.v1.variable_scope(scope, reuse=tf.compat.v1.AUTO_REUSE):
+#             a = tf.to_float(a)
+            a = tf.cast(a, tf.float32)
 
             z = utils.tile_concat(zs[-1], a)
             for i in range(n_upsamplings - 1):
@@ -63,9 +64,9 @@ class UNetGdec:
             x = tf.nn.tanh(dconv_(z, 3, 4, 2))
 
         # variables and update operations
-        self.variables = tf.global_variables(scope)
-        self.trainable_variables = tf.trainable_variables(scope)
-        self.reg_losses = tf.losses.get_regularization_losses(scope)
+        self.variables = tf.compat.v1.global_variables(scope)
+        self.trainable_variables = tf.compat.v1.trainable_variables(scope)
+        self.reg_losses = tf.compat.v1.losses.get_regularization_losses(scope)
 
         return x
 
@@ -82,7 +83,7 @@ class ConvD:
 
         conv_norm_lrelu = functools.partial(conv_, normalizer_fn=norm, activation_fn=tf.nn.leaky_relu)
 
-        with tf.variable_scope(scope, reuse=tf.AUTO_REUSE):
+        with tf.compat.v1.variable_scope(scope, reuse=tf.compat.v1.AUTO_REUSE):
             z = x
             for i in range(n_downsamplings):
                 d = min(dim * 2**i, MAX_DIM)
@@ -96,9 +97,9 @@ class ConvD:
             logit_att = fc_(logit_att, n_atts)
 
         # variables and update operations
-        self.variables = tf.global_variables(scope)
-        self.trainable_variables = tf.trainable_variables(scope)
-        self.reg_losses = tf.losses.get_regularization_losses(scope)
+        self.variables = tf.compat.v1.global_variables(scope)
+        self.trainable_variables = tf.compat.v1.trainable_variables(scope)
+        self.reg_losses = tf.compat.v1.losses.get_regularization_losses(scope)
 
         return logit_gan, logit_att
 

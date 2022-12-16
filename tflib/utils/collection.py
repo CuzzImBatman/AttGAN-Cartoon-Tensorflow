@@ -61,7 +61,7 @@ def get_collection(key,
                           excludes_combine_type)
 
 
-global_variables = partial(get_collection, key=tf.GraphKeys.GLOBAL_VARIABLES)
-local_variables = partial(get_collection, key=tf.GraphKeys.LOCAL_VARIABLES)
-trainable_variables = partial(get_collection, key=tf.GraphKeys.TRAINABLE_VARIABLES)
-update_ops = partial(get_collection, key=tf.GraphKeys.UPDATE_OPS)
+global_variables = partial(get_collection, key=tf.compat.v1.GraphKeys.GLOBAL_VARIABLES)
+local_variables = partial(get_collection, key=tf.compat.v1.GraphKeys.LOCAL_VARIABLES)
+trainable_variables = partial(get_collection, key=tf.compat.v1.GraphKeys.TRAINABLE_VARIABLES)
+update_ops = partial(get_collection, key=tf.compat.v1.GraphKeys.UPDATE_OPS)

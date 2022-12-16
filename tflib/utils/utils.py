@@ -7,10 +7,10 @@ def session(graph=None,
             log_device_placement=False,
             allow_growth=True):
     """Return a Session with simple config."""
-    config = tf.ConfigProto(allow_soft_placement=allow_soft_placement,
+    config = tf.compat.v1.ConfigProto(allow_soft_placement=allow_soft_placement,
                             log_device_placement=log_device_placement)
     config.gpu_options.allow_growth = allow_growth
-    return tf.Session(graph=graph, config=config)
+    return tf.compat.v1.Session(graph=graph, config=config)
 
 
 class Checkpoint:
@@ -93,20 +93,20 @@ def summary_v2(name_data_dict,
     def _summary(name, data):
         summaries = []
         if data.shape == ():
-            summaries.append(tf.contrib.summary.scalar(name, data, step=step))
+            summaries.append(tf.summary.scalar(name, data, step=step))
         else:
             if 'mean' in types:
-                summaries.append(tf.contrib.summary.scalar(name + '-mean', tf.math.reduce_mean(data), step=step))
+                summaries.append(tf.summary.scalar(name + '-mean', tf.math.reduce_mean(data), step=step))
             if 'std' in types:
-                summaries.append(tf.contrib.summary.scalar(name + '-std', tf.math.reduce_std(data), step=step))
+                summaries.append(tf.summary.scalar(name + '-std', tf.math.reduce_std(data), step=step))
             if 'max' in types:
-                summaries.append(tf.contrib.summary.scalar(name + '-max', tf.math.reduce_max(data), step=step))
+                summaries.append(tf.summary.scalar(name + '-max', tf.math.reduce_max(data), step=step))
             if 'min' in types:
-                summaries.append(tf.contrib.summary.scalar(name + '-min', tf.math.reduce_min(data), step=step))
+                summaries.append(tf.summary.scalar(name + '-min', tf.math.reduce_min(data), step=step))
             if 'sparsity' in types:
-                summaries.append(tf.contrib.summary.scalar(name + '-sparsity', tf.math.zero_fraction(data), step=step))
+                summaries.append(tf.summary.scalar(name + '-sparsity', tf.math.zero_fraction(data), step=step))
             if 'histogram' in types:
-                summaries.append(tf.contrib.summary.histogram(name, data, step=step))
+                summaries.append(tf.summary.histogram(name, data, step=step))
         return summaries
 
     with tf.name_scope(name):
@@ -117,12 +117,12 @@ def summary_v2(name_data_dict,
 
 
 def counter(start=0, scope=None):
-    with tf.variable_scope(scope, 'counter'):
-        counter = tf.get_variable(name='counter',
+    with tf.compat.v1.variable_scope(scope, 'counter'):
+        counter = tf.compat.v1.get_variable(name='counter',
                                   initializer=tf.constant_initializer(start),
                                   shape=(),
                                   dtype=tf.int64)
-        update_cnt = tf.assign(counter, tf.add(counter, 1))
+        update_cnt = tf.compat.v1.assign(counter, tf.add(counter, 1))
         return counter, update_cnt
 
 
